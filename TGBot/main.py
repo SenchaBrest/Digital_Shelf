@@ -3,8 +3,7 @@ import os
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-import shutil
-import pandas as pd
+from Recognition.crop import crop
 
 import algo
 from config import TOKEN, yoloPath
@@ -31,19 +30,19 @@ async def process_photo_command(message: types.Message):
 
     await message.photo[-1].download(file_path)
     await message.reply("Подождите...")
-    # yolov5
-    # —detect_res
-    # ——objects
-    # ———labels
-    # ————1.txt
-    # ———1.jpg
-    # ——tags
-    # ———labels
-    # ————1.txt
-    # ———1.jpg
-    # —detect.py
-    # —crop.py
-    # —res_rec_obj.txt
+    '''yolov5
+    —detect_res
+    ——objects
+    ———labels
+    ————1.txt
+    ———1.jpg
+    ——tags
+    ———labels
+    ————1.txt
+    ———1.jpg
+    —detect.py
+    —crop.py
+    —res_rec_obj.txt'''
     os.system(
         f"python {yoloPath}detect.py --weights tags.pt --conf 0.3 --img-size 640 --source {file_path} "
         f"--save-txt --classes 1 0 ")  # ценники
@@ -54,8 +53,8 @@ async def process_photo_command(message: types.Message):
         f"python {yoloPath}detect.py --weights 3.pt 4.pt 5.pt 6.pt --conf 0.5 --img-size 640 --source {file_path} "
         f"--save-txt")  # объекты
 
-    # detect_res/tags/{file_path}
-    # crop.
+    p_to_photo_obj = crop(file_path, f"detect_res/objects/{file_path.replace('.jpg', '.txt')}")
+    await bot.send_photo(message.chat.id, open(p_to_photo_obj, 'rb'))
 
     algo.preparePhoto(labelOfPrices=f"{yoloPath}detect_res/tags/labels/{file_path}",
                       labelOfProducts=f"{yoloPath}res_rec_obj.txt")
