@@ -30,6 +30,7 @@ async def process_photo_command(message: types.Message):
 
     await message.photo[-1].download(file_path)
     await message.reply("Подождите...")
+    algo.open_image(file_path)
     '''yolov5
     —detect_res
     ——objects
@@ -44,20 +45,20 @@ async def process_photo_command(message: types.Message):
     —crop.py
     —res_rec_obj.txt'''
     os.system(
-        f"python {yoloPath}detect.py --weights tags.pt --conf 0.3 --img-size 640 --source {file_path} "
+        f"python {yoloPath}detect.py --weights {yoloPath}tags.pt --conf 0.0 --img-size 640 --source {file_path} "
         f"--save-txt --classes 1 0 ")  # ценники
 
-    await bot.send_photo(message.chat.id, open(f"{yoloPath}detect_res/tags/{file_path}", 'rb'))
+    await bot.send_photo(message.chat.id, open(f"detect_res/tags/{file_path}", 'rb'))
 
     os.system(
-        f"python {yoloPath}detect.py --weights 3.pt 4.pt 5.pt 6.pt --conf 0.5 --img-size 640 --source {file_path} "
+        f"python {yoloPath}detect.py --weights {yoloPath}3.pt {yoloPath}4.pt {yoloPath}5.pt {yoloPath}6.pt --conf 0.5 --img-size 640 --source {file_path} "
         f"--save-txt")  # объекты
 
-    p_to_photo_obj = crop(file_path, f"detect_res/objects/{file_path.replace('.jpg', '.txt')}")
+    p_to_photo_obj = crop(file_path, f"detect_res/objects/labels/{file_path.replace('.jpg', '.txt')}")
     await bot.send_photo(message.chat.id, open(p_to_photo_obj, 'rb'))
 
-    algo.preparePhoto(labelOfPrices=f"{yoloPath}detect_res/tags/labels/{file_path}",
-                      labelOfProducts=f"{yoloPath}res_rec_obj.txt")
+    algo.preparePhoto(labelOfPrices=f"detect_res/tags/labels/{file_path.replace('.jpg', '.txt')}",
+                      labelOfProducts=f"res_rec_obj.txt")
 
     countOfShelves, Shelves = algo.calcShelvesCount()
     algo.fillShelvesByPrices()

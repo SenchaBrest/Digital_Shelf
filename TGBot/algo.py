@@ -2,7 +2,11 @@
 
 from PIL import Image, ImageDraw, ImageFont
 
-img = Image.open('images/image.jpg')
+img = None
+
+def open_image(path):
+    global img
+    img = Image.open(path)
 
 color = {"odd": [255, 0, 0],
          "already in row": [0, 255, 0],
@@ -372,20 +376,20 @@ def isInEachOther(productA, productB):
         pass
 
 
-preparePhoto(labelOfPrices='labels/prices.txt', labelOfProducts='labels/products.txt')
+# preparePhoto(labelOfPrices='labels/prices.txt', labelOfProducts='labels/products.txt')
 
 # for q in products:
 #     createImage(q)
 # img.save("temp.jpg")
 
-calcShelvesCount()
-
-fillShelvesByPrices()
-fillShelvesByProducts()
-
-calcLengthOfLayout()
-calcTagsCount()
-calcPricesCount()
-
-findVoids()
-findMistakes()
+# calcShelvesCount()
+#
+# fillShelvesByPrices()
+# fillShelvesByProducts()
+#
+# calcLengthOfLayout()
+# calcTagsCount()
+# calcPricesCount()
+#
+# findVoids()
+# findMistakes()
