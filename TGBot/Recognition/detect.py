@@ -81,8 +81,8 @@ def run(
         vid_stride=1,  # video frame-rate stride
 ):
     source = str(source)
-
-    if weights == ['tags.pt']:  # special case for tag inference
+    yoloPath = 'Recognition/'
+    if weights == [f'{yoloPath}tags.pt']:  # special case for tag inference
         save_img = not nosave and not source.endswith('.txt')  # save inference images
         save_dir = Path(Path('detect_res') / 'tags', exist_ok=opt.exist_ok)  # save results to
     else:
