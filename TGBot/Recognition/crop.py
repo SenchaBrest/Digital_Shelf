@@ -57,7 +57,7 @@ def crop(photo, labels, directory = "Recognition/merge"):
     examples = []
     for dirname in os.listdir(directory):
         path = f"{directory}/{dirname}"
-        color = [random.randint(0, 255) for _ in range(3)]
+        color = [random.randint(10, 255) for _ in range(3)]
         for filename in os.listdir(path):
             path = f"{directory}/{dirname}/{filename}"
             Image.open(path).resize((224, 224)).save(path)
@@ -85,12 +85,12 @@ def crop(photo, labels, directory = "Recognition/merge"):
         name = examples[koefs[0][1]][0]
         color = examples[koefs[0][1]][1]
 
-        data.append(f"{name} {x_l / photoWidth} {y_l / photoHeight} {x_r / photoWidth} {y_r / photoHeight}\n")
+        data.append(f"{name} {elem[1]} {elem[2]} {elem[3]} {elem[4]}\n")
 
         plot_one_box_PIL([x_l, y_l, x_r, y_r], pencil, img.size, color=color,
                          label=f"{str(name).replace('.jpg', '')}", line_thickness=3)
 
-    with open(f"res_rec_obj.txt", "a") as f:
+    with open(f"res_rec_obj.txt", "w") as f:
         for dt in data:
             f.write(dt)
 

@@ -7,7 +7,9 @@ TGBot/Recognition/6.pt
 TGBot/Recognition/7.pt
 TGBot/Recognition/8.pt
 TGBot/Recognition/tags.pt
-TGBot/venv
+
+venv
+TGBot/__pycache__
 TGBot/Recognition/__pycache__
 TGBot/Recognition/crops
 TGBot/Recognition/merge

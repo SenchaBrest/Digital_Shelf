@@ -1,17 +1,20 @@
 # print("Hello, world!") имба не контрится
+import random
 
 from PIL import Image, ImageDraw, ImageFont
-
 img = None
+Path = None
 
 def open_image(path):
     global img
+    global Path
     img = Image.open(path)
+    Path = path
 
-color = {"odd": [255, 0, 0],
-         "already in row": [0, 255, 0],
+color = {"odd": [0, 0, 0],
+         "already in row": [0, 0, 0],
          "void": [0, 0, 0],
-         "column": [255, 0, 255],
+         "column": [0, 0, 0],
          '0': [0, 255, 0],
          '1': [255, 0, 0],
          '2': [0, 0, 255],
@@ -32,6 +35,8 @@ def drawBoxPIL(box, pencil, size, color=None, label=None, line_thickness=None):
 def createImage(mistake):
     pw, ph = img.size
     pencil = ImageDraw.Draw(img)
+    if not color.get(mistake.tag):
+        color[mistake.tag]=[random.randint(10, 255) for _ in range(3)]
     drawBoxPIL([mistake.x * pw, mistake.y * ph, (mistake.x + mistake.w) * pw, (mistake.y + mistake.h) * ph],
                pencil, img.size,
                color=color[mistake.tag],
@@ -186,11 +191,25 @@ def fillShelvesByProducts():
                     products_pos[j].append([i])
                 elif (abs(products[products_pos[j][-1][-1]].x - products[i].x) <
                       products[i].w / 2):
-                    products_pos[j][-1].append(i)
+                    k = 0
+                    while k < len(products_pos[j][-1]):
+                        if products[products_pos[j][-1][k]].y < products[i].y:
+                            break
+                        k += 1
+                    products_pos[j][-1].insert(k, i)
                 else:
-
                     products_pos[j].append([i])
                 break
+    # for i, row in enumerate(products_pos):
+    #     for j, column in enumerate(row):
+    #         for k in range(1, len(column)):
+    #             print(i, j, column)
+    #             for xxx in column:
+    #                 products[xxx].show()
+    #             if products[column[k]].y + products[column[k]].h + 0.001 > products[column[k-1]].y:
+    #                 print(i, j)
+    #                 column = column[0:k]
+    #                 print(column)
 
     # print("fillShelvesByProducts:", products_pos)
     return products_pos
@@ -364,16 +383,28 @@ def findMistakes():
     for mistake in mistakes:
         createImage(mistake)
     img.save("errors.jpg")
+    return "errors.jpg"
 
 
-# проверка на нахождение друг в друге
-def isInEachOther(productA, productB):
-    minArea = min(productA.w * productA.h, productB.w * productB.h)
-    width = min(productA.x + productA.w, productB.x + productB.w) - max(productA.x, productB.x)
-    height = min(productA.y + productA.h, productB.y + productB.h) - max(productA.y, productB.y)
-    intersection = width * height
-    if intersection > 2 * minArea:
-        pass
+def temp():
+    global img
+    img = Image.open(Path)
+    print(products_pos)
+    for i in products_pos:
+        for j in i:
+            for k in j:
+                createImage(products[k])
+    img.show()
+
+
+
+def removeBackLayout():
+    for i in range(len(shelves_h)):
+        maxY = max(products[pr_pos[0]].y+products[pr_pos[0]].h for pr_pos in products_pos[i])
+        for j in products_pos[i]:
+            if (abs(products[j[0]].y + products[j[0]].h - maxY) > K / 4):
+                products_pos[i].remove(j)
+    temp()
 
 
 # preparePhoto(labelOfPrices='labels/prices.txt', labelOfProducts='labels/products.txt')
