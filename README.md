@@ -49,7 +49,7 @@ flowchart TB
 ### Пример работы <a name="example"></a>
 
 
-
+---
 ### Установка приложения <a name="download"></a>
 По умолчанию наш проект работает на архитектуре yolov5, поэтому следуя нижепреведенным инструкциям вы будете использровать именно ее.
 
@@ -61,13 +61,15 @@ git clone https://github.com/SenchaBrest/Digital_Shelf.git
 pip install -r requirements.txt
 ```
 Для скачивания весов пройдите по ссылке: [weights](https://github.com/SenchaBrest/Digital_Shelf/releases/tag/weights-yolov5)
-
 Если вы хотите обучить самостоятельно, возьмите архивы фотографий [здесь](https://github.com/SenchaBrest/Digital_Shelf/releases/tag/Datasets)
+
 ---
+
 Если вы хотите использовать программу на архитектуре yolov7, вам потребуется самостоятельно [склонировать](https://github.com/WongKinYiu/yolov7).
 После этого вы можете скачать наш проект в файле zip и распаковать его в склонированном репозитории.
 Для yolov7 веса находятся [здесь](https://github.com/SenchaBrest/Digital_Shelf/releases/tag/weights-yolov7)
 
+---
 [назад к содержанию](#desc)
 
 
